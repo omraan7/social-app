@@ -1,0 +1,392 @@
+import { Card, CardHeader, CardBody, CardFooter, Avatar, Button, User, Skeleton, button, Image } from "@heroui/react"
+import { useContext, useState } from "react";
+import { authcontext } from "../../context/Authcontext";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+ import Swal from "sweetalert2";
+import { Link } from "react-router";
+import axios from "axios";
+import Createcomment from "../../Componants/createcomment/Createcomment";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, } from "@heroui/react";
+import EditPostmodel from "../../Componants/EditPostModal/EditPostmodel";
+ 
+
+
+export default function CardPost({ post, cart }) {
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    console.log(post);
+
+
+
+
+    const queryClient = useQueryClient()
+    const [openAllcoments, setopenAllcoments] = useState(false)
+    const { user, token } = useContext(authcontext)
+
+
+
+    //  const { token } = useContext(authcontext)
+
+    //   const { data, isLoading, isError, error } = useQuery({
+    //     queryKey: ["comments"],
+    //     queryFn: Getposts
+    //   })
+
+    //   console.log(data);
+    //   console.log("isloading", isLoading);
+
+    //   console.log("isError", isError);
+
+    //   console.log(" error", error);
+
+    //   function Getposts() {
+    //     return axios.get(`${import.meta.env.VITE_API_URL}/posts//comments?page=1&limit=10`, {
+    //       headers: {
+    //         // token:token
+    //         Authorization: `Bearer ${token}`
+    //       }
+    //     })
+
+    //   }
+    //   if (isLoading) {
+    //     return <Skeletonn  />
+
+    //   }
+    //   if (isError) {
+    //     return <h1 className="flex justify-center items-center h-screen">{`error ${error.message}`}</h1>
+    //   }
+
+    function timeAgo(dateString) {
+        const now = new Date();
+        const past = new Date(dateString);
+        const diff = (now - past) / 1000;
+
+        if (diff < 60) return "منذ لحظات";
+
+        const minutes = diff / 60;
+        if (minutes < 60) return `منذ ${Math.floor(minutes)} دقيقة`;
+
+        const hours = minutes / 60;
+        if (hours < 24) return `منذ ${Math.floor(hours)} ساعة`;
+
+        const days = hours / 24;
+        if (days < 7) return `منذ ${Math.floor(days)} يوم`;
+
+        const weeks = days / 7;
+        if (weeks < 4) return `منذ ${Math.floor(weeks)} أسبوع`;
+
+        const months = days / 30;
+        if (months < 12) return `منذ ${Math.floor(months)} شهر`;
+
+        const years = days / 365;
+        return `منذ ${Math.floor(years)} سنة`;
+    }
+
+    const { data, isLoading, isError, error } = useQuery({
+        queryKey: ["postComments", post.id],
+        queryFn: () => axios.get(
+            `${import.meta.env.VITE_API_URL}posts/${post.id}/comments?page=1&limit=10`,
+            { headers: { Authorization: `Bearer ${token}` } }
+        ),
+        enabled: openAllcoments,
+        select: (res) => res.data.data.comments
+
+    })
+    console.log(data);
+
+
+    // async function handelDeleteComent() {
+    //     const res = await axios.delete(`${import.meta.env.VITE_API_URL}posts/${post.id}/comments/${data._id}  `, { headers: { Authorization: `Bearer ${token}` } })
+    //     console.log(res);
+    //     // Swal.fire("SweetAlert2 is working!");
+    //     Swal.fire({
+    //         title: "Are you sure?",
+    //         text: "You won't be able to revert this!",
+    //         icon: "warning",
+    //         showCancelButton: true,
+    //         confirmButtonColor: "#3085d6",
+    //         cancelButtonColor: "#d33",
+    //         confirmButtonText: "Yes, delete it!"
+    //     }).then((result) => {
+    //         if (result.isConfirmed) {
+    //             Swal.fire({
+    //                 title: "Deleted!",
+    //                 text: "Your file has been deleted.",
+    //                 icon: "success"
+    //             });
+    //         }
+    //     });
+
+
+    // }
+    // تعديل handelDeleteComent ليقبل commentId
+    async function handelDeleteComent(commentId) {
+        if (!commentId) return; // حماية لو مش موجود id
+
+        const result = await Swal.fire({
+            title: 'هل أنت متأكد؟',
+            text: "الكومنت هيتم حذفه نهائيًا!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'نعم، احذفه!',
+            cancelButtonText: 'إلغاء'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await axios.delete(`${import.meta.env.VITE_API_URL}posts/${post.id}/comments/${commentId}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                queryClient.invalidateQueries(["postComments", post.id]);
+                queryClient.invalidateQueries(["posts"]);
+                Swal.fire('تم الحذف!', 'الكومنت اتحذف بنجاح.', 'success');
+            } catch (err) {
+                console.error(err);
+                Swal.fire('خطأ!', 'حدث خطأ أثناء الحذف.', 'error');
+            }
+        }
+    }
+
+    // if (isLoading) {
+    //     return <Skeletonn  page={3}/>
+
+    // }
+    if (isError) {
+        return <h1 className="flex justify-center items-center h-screen">{`error ${error.message}`}</h1>
+    }
+    async function HanselDeleatePost() {
+        const result = await Swal.fire({
+            title: 'هل أنت متأكد؟',
+            text: "البوست هيتم حذفه نهائيًا!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'نعم، احذفه!',
+            cancelButtonText: 'إلغاء'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await axios.delete(`${import.meta.env.VITE_API_URL}posts/${post.id}`, { headers: { Authorization: `Bearer ${token}` } })
+                queryClient.invalidateQueries(["myPosts"])
+                Swal.fire('تم الحذف!', 'البوست اتحذف بنجاح.', 'success');
+
+
+            } catch (err) {
+                console.error(err);
+                Swal.fire('خطأ!', 'حدث خطأ أثناء الحذف.', 'error');
+            }
+        }
+        // const res = await axios.delete(`${import.meta.env.VITE_API_URL}posts/${post.id}`, { headers: { Authorization: `Bearer ${token}` } })
+        // queryClient.invalidateQueries(["myPosts"])
+
+
+
+
+    }
+    post?.commentsCount
+    return (
+        <>
+  <EditPostmodel
+  post={post}
+  isOpen={isEditModalOpen}
+  setIsOpen={setIsEditModalOpen}
+/>
+            <Card
+                className={`overflow-hidden mx-auto my-1.5 min-h-62
+  ${cart === "profile" ? "max-w-6xl" : "max-w-4xl"} `}
+            >
+
+                <CardHeader className="justify-between">
+
+                    <div className="flex gap-5">
+                        <Avatar
+                            isBordered
+                            radius="full"
+                            size="md"
+                            src={post.user.photo}
+                        />
+                        <div className="flex flex-col gap-1 items-start justify-center">
+                            <h4 className="text-small font-semibold leading-none text-default-600">{post.user.name}</h4>
+                            <h5 className="text-small tracking-tight text-default-400"> {timeAgo(post.createdAt)}</h5>
+                        </div>
+                    </div>
+
+                    {user.id === post.user._id ? <Dropdown>
+                        <DropdownTrigger>
+                            <Button variant="bordered" className="bg-transparent text-foreground border-default-200"
+                                color="primary"
+                                radius="full"
+                                size="sm"
+                            >  Menu</Button>
+                        </DropdownTrigger>
+                        <DropdownMenu aria-label="Static Actions">
+                     
+                            <DropdownItem key="edit" onClick={() => setIsEditModalOpen(true)}>
+                                Edit Post
+                            </DropdownItem>
+
+                            <DropdownItem key="delete" className="text-danger" color="danger" onClick={HanselDeleatePost}>
+                                Delete Post
+                            </DropdownItem>
+                            
+                        </DropdownMenu>
+                    </Dropdown> : <Button
+                        className="bg-blue-500 text-foreground "
+                        color="primary"
+                        radius="full"
+                        size="sm"
+                        variant="bordered"
+
+                    >
+                        Follow
+                    </Button>}
+                    
+                </CardHeader>
+                <EditPostmodel post={post} isEditModalOpen={isEditModalOpen} setIsEditModalOpen={setIsEditModalOpen} />
+             
+                <CardBody className="  px-3 py-5 text-small text-default-900">
+                    <p className="mb-2.5 ">{post.body}</p>
+                    {post.image && <Image className="     " src={post.image} alt={post.body} />}
+
+
+                </CardBody>
+                <Link to={`/DetailsPost/${post._id}`} state={{ from: location.pathname }}> <h5 className="text-small text-end mr-5 font-semibold  text-sky-600  ">more details</h5></Link>
+                <CardFooter className="flex flex-col ">
+
+                    <div className="gap-10 grid grid-cols-3">
+                        <Button
+
+                            className="bg-transparent text-foreground border border-gray-400"
+                            color="primary"
+                            radius="full"
+                            size="sm"
+                            variant="bordered"
+
+                        >
+                            {post?.likesCount}  Like
+                        </Button>
+                        <Button
+                            className="bg-transparent text-foreground border border-gray-400"
+                            color="primary"
+                            radius="full"
+                            size="sm"
+                            variant="bordered"
+
+                        >
+                            {post?.commentsCount + (post?.topComment ? 1 : 0)}   comment
+                        </Button>
+                        <Button
+                            className="bg-transparent text-foreground border border-gray-400"
+                            color="primary"
+                            radius="full"
+                            size="sm"
+                            variant="bordered"
+
+                        >
+                            {post?.sharesCount}   share
+                        </Button>
+                    </div>
+                    <div className="flex w-full flex-col gap-2 justify-start  rounded-2xl  ">
+                        {/* {post?.topComment && (
+                            // <div className="py-5 px-2.5 my-3.5 bg-gray-200 text-foreground rounded-2xl">
+                            //     <User
+                            //         avatarProps={{
+                            //             src: post.topComment.commentCreator?.photo,
+                            //         }}
+                            //         name={post.topComment.commentCreator?.name}
+                            //     />
+                            //     <p>{post.topComment.content}</p>
+                            // </div>
+                        )} */}
+
+                        <div className="space-y-3">
+                            {post.topComment && <div className="flex  my-2.5 gap-2">
+                                <Image
+                                    src={post.topComment?.commentCreator?.photo}
+                                    className="w-8 h-8 rounded-full"
+                                    alt=""
+                                />
+
+                                <div className="bg-gray-100 rounded-2xl px-3 py-2 max-w-md">
+                                    <p className="font-semibold text-sm">{post.topComment?.commentCreator?.name}</p>
+                                    <p className="text-sm text-gray-700">
+                                        {post?.topComment?.content}
+                                    </p>
+
+                                    <Image src={post?.topComment?.image} alt="" />
+                                    {post.topComment.commentCreator?._id === user.id && (
+                                        <button
+                                            className="text-red-600 text-sm font-semibold ml-2 hover:underline"
+                                            onClick={() => handelDeleteComent(post.topComment._id)}
+                                        >
+                                            Delete
+                                        </button>
+                                    )}
+                                </div>
+
+                            </div>}
+                            {/* //wsdsa */}
+
+
+                            {openAllcoments && (isLoading ? (
+                                <Card className="max-w-96 overflow-hidden mx-auto my-3.5   min-h-20" radius="lg">
+
+                                    <div className="space-y-3">
+                                        <Skeleton className="w-3/5 rounded-lg my-2.5">
+                                            <div className="h-3 w-3/5 rounded-lg bg-default-200" />
+                                        </Skeleton>
+                                        <Skeleton className="w-4/5 rounded-lg my-2.5">
+                                            <div className="h-3 w-4/5 rounded-lg bg-default-200" />
+                                        </Skeleton>
+                                        <Skeleton className="w-2/5 rounded-lg my-2.5">
+                                            <div className="h-3 w-2/5 rounded-lg bg-default-300" />
+                                        </Skeleton>
+                                    </div>
+                                </Card>) : (data.map((comment) => (
+                                    <div key={comment._id} className="bg-white p-0 mt-2 rounded-xl  ">
+
+
+                                        <div className="flex gap-2 mb-3">
+                                            <Image
+                                                src={comment.commentCreator?.photo}
+                                                className="w-8 h-8 rounded-full"
+                                            />
+
+                                            <div className="bg-gray-100 px-3 py-2 rounded-2xl">
+                                                <p className="font-semibold text-sm">
+                                                    {comment.commentCreator?.name}
+                                                </p>
+                                                <p className="text-sm">{comment.content}</p>
+                                                <Image src={comment?.image} alt="" />
+                                                {comment.commentCreator?._id === user.id && (
+                                                    <button
+                                                        className="text-red-600 text-sm font-semibold ml-2 hover:underline"
+                                                        onClick={() => handelDeleteComent(comment._id)}
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                ))))}
+
+
+                            <Createcomment postid={post.id} />
+
+                        </div>
+                        {openAllcoments ? (post?.commentsCount > 1 && <p className="text-small text-end mr-5 font-semibold  text-sky-600  cursor-pointer" onClick={() => setopenAllcoments(false)} > Hide Comments</p>) : (post?.commentsCount > 1 && <p className=" font-small  text-center mr-5 font-semibold  text-sky-600 cursor-pointer" onClick={() => setopenAllcoments(true)} > more Comments</p>)}
+
+                    </div>
+                </CardFooter>
+
+            </Card>
+
+        </>
+    )
+}
