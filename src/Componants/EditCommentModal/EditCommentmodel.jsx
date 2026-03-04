@@ -8,15 +8,17 @@ import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import axios from "axios";
 
-export default function EditPostmodel({ isOpen, setIsOpen, post }) {
- 
+export default function EditCommentmodel({ isOpen, setIsOpen, comment, post }) {
+    console.log(comment);
+
+
     const imgUplode = useRef();
     const [img, setimg] = useState(null)
     const { token } = useContext(authcontext)
     const queryClient = useQueryClient();
     const { register, handleSubmit, reset } = useForm({
         defaultValues: {
-         body: post.body || "",
+            body: comment?.content || "",
         }
 
     })
@@ -24,22 +26,24 @@ export default function EditPostmodel({ isOpen, setIsOpen, post }) {
 
         setimg(e.target.files[0])
     }
-    
-useEffect(() => {
-  if (isOpen) {
-    reset({ body: post.body || "" });
-  }
-}, [isOpen, post, reset]);
-    async function sendpost(data) {
+
+    useEffect(() => {
+        if (isOpen) {
+            reset({ body: comment?.content || "" });
+
+            //    setimg(null);
+        }
+    }, [isOpen, comment, reset]);
+    async function sendcomment(data) {
         const myformdata = new FormData()
-        if (data.body?.trim()) myformdata.append("body", data.body)
+        if (data.body?.trim()) myformdata.append("content", data?.body)
         if (img) myformdata.append("image", img)
 
         if (!data.body?.trim() && !img) {
             toast.error("Post can't be empty");
             return;
         }
-        toast.promise(axios.put(`${import.meta.env.VITE_API_URL}posts/${post.id}`, myformdata, {
+        toast.promise(axios.put(`${import.meta.env.VITE_API_URL}posts/${post.id}/comments/${comment._id}`, myformdata, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -72,7 +76,7 @@ useEffect(() => {
             }}
             radius="lg"
         >
-            <form onSubmit={handleSubmit(sendpost)} >
+            <form onSubmit={handleSubmit(sendcomment)} >
                 <ModalContent>
                     <ModalHeader>Update Post</ModalHeader>
                     <ModalBody>
@@ -83,7 +87,7 @@ useEffect(() => {
                             className="w-full border p-2 mb-3 rounded"
                         />
                         <Image
-                            src={img ? URL.createObjectURL(img) : post.image}
+                            src={img ? URL.createObjectURL(img) : comment?.image}
                             alt="Post Image"
                             className="w-full mb-3"
                         />
@@ -92,11 +96,12 @@ useEffect(() => {
                             className="text-blue-400 mb-3"
                             onClick={() => imgUplode.current.click()}
                         />
+
                         <input type="file" className="hidden" onChange={Uplodimg} ref={imgUplode} />
                     </ModalBody>
-                    
+                     
                     <ModalFooter>
-                        <Button color="foreground" variant="light" onClick={() => {setimg(null);  setIsOpen(false)}}>
+                        <Button color="foreground" variant="light" onClick={() => { setimg(null); setIsOpen(false) }}>
                             Close
                         </Button>
                         <Button type="submit" className="bg-[#6f4ef2] shadow-lg shadow-indigo-500/20">

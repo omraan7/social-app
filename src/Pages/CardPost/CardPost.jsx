@@ -1,18 +1,22 @@
-import { Card, CardHeader, CardBody, CardFooter, Avatar, Button, User, Skeleton, button, Image } from "@heroui/react"
+import { Card, CardHeader, CardBody, CardFooter, Avatar, Button, User, Skeleton, Image } from "@heroui/react"
 import { useContext, useState } from "react";
 import { authcontext } from "../../context/Authcontext";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
- import Swal from "sweetalert2";
+import Swal from "sweetalert2";
 import { Link } from "react-router";
 import axios from "axios";
 import Createcomment from "../../Componants/createcomment/Createcomment";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, } from "@heroui/react";
 import EditPostmodel from "../../Componants/EditPostModal/EditPostmodel";
- 
+import EditCommentmodel from "../../Componants/EditCommentModal/EditCommentmodel";
+
 
 
 export default function CardPost({ post, cart }) {
+    const [commentModel, setcommentModel] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [SelectedComment, setSelectedComment] = useState(null)
+
     console.log(post);
 
 
@@ -120,17 +124,17 @@ export default function CardPost({ post, cart }) {
     // }
     // تعديل handelDeleteComent ليقبل commentId
     async function handelDeleteComent(commentId) {
-        if (!commentId) return; // حماية لو مش موجود id
+        if (!commentId) return;
 
         const result = await Swal.fire({
-            title: 'هل أنت متأكد؟',
-            text: "الكومنت هيتم حذفه نهائيًا!",
+            title: 'Do you want to delete this comment?',
+            text: "the comment will be deleted!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'نعم، احذفه!',
-            cancelButtonText: 'إلغاء'
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'cancel'
         });
 
         if (result.isConfirmed) {
@@ -141,13 +145,15 @@ export default function CardPost({ post, cart }) {
 
                 queryClient.invalidateQueries(["postComments", post.id]);
                 queryClient.invalidateQueries(["posts"]);
-                Swal.fire('تم الحذف!', 'الكومنت اتحذف بنجاح.', 'success');
+                Swal.fire('Deleted!', 'The comment has been deleted.', 'success');
             } catch (err) {
                 console.error(err);
-                Swal.fire('خطأ!', 'حدث خطأ أثناء الحذف.', 'error');
+                Swal.fire('Error', 'error');
             }
         }
     }
+
+
 
     // if (isLoading) {
     //     return <Skeletonn  page={3}/>
@@ -190,11 +196,17 @@ export default function CardPost({ post, cart }) {
     post?.commentsCount
     return (
         <>
-  <EditPostmodel
-  post={post}
-  isOpen={isEditModalOpen}
-  setIsOpen={setIsEditModalOpen}
-/>
+            <EditPostmodel
+                post={post}
+                isOpen={isEditModalOpen}
+                setIsOpen={setIsEditModalOpen}
+            />
+            <EditCommentmodel
+                post={post}
+                comment={SelectedComment}
+                isOpen={commentModel}
+                setIsOpen={setcommentModel}
+            />
             <Card
                 className={`overflow-hidden mx-auto my-1.5 min-h-62
   ${cart === "profile" ? "max-w-6xl" : "max-w-4xl"} `}
@@ -224,7 +236,7 @@ export default function CardPost({ post, cart }) {
                             >  Menu</Button>
                         </DropdownTrigger>
                         <DropdownMenu aria-label="Static Actions">
-                     
+
                             <DropdownItem key="edit" onClick={() => setIsEditModalOpen(true)}>
                                 Edit Post
                             </DropdownItem>
@@ -232,7 +244,7 @@ export default function CardPost({ post, cart }) {
                             <DropdownItem key="delete" className="text-danger" color="danger" onClick={HanselDeleatePost}>
                                 Delete Post
                             </DropdownItem>
-                            
+
                         </DropdownMenu>
                     </Dropdown> : <Button
                         className="bg-blue-500 text-foreground "
@@ -244,10 +256,10 @@ export default function CardPost({ post, cart }) {
                     >
                         Follow
                     </Button>}
-                    
+
                 </CardHeader>
                 <EditPostmodel post={post} isEditModalOpen={isEditModalOpen} setIsEditModalOpen={setIsEditModalOpen} />
-             
+
                 <CardBody className="  px-3 py-5 text-small text-default-900">
                     <p className="mb-2.5 ">{post.body}</p>
                     {post.image && <Image className="     " src={post.image} alt={post.body} />}
@@ -319,12 +331,25 @@ export default function CardPost({ post, cart }) {
 
                                     <Image src={post?.topComment?.image} alt="" />
                                     {post.topComment.commentCreator?._id === user.id && (
-                                        <button
-                                            className="text-red-600 text-sm font-semibold ml-2 hover:underline"
-                                            onClick={() => handelDeleteComent(post.topComment._id)}
-                                        >
-                                            Delete
-                                        </button>
+                                        <>
+
+                                            <button
+                                                className="text-red-600 text-sm font-semibold ml-2 hover:underline"
+                                                onClick={() => handelDeleteComent(post.topComment._id)}
+                                            >
+                                                Delete
+                                            </button>
+                                            <button
+                                                className="text-blue-600 text-sm  font-semibold ml-2 hover:underline"
+                                                onClick={() => {
+                                                    setSelectedComment(post.topComment);
+                                                    setcommentModel(true);
+                                                }}
+                                            >
+                                                Edite
+                                            </button>
+
+                                        </>
                                     )}
                                 </div>
 
@@ -333,7 +358,7 @@ export default function CardPost({ post, cart }) {
 
 
                             {openAllcoments && (isLoading ? (
-                                <Card className="max-w-96 overflow-hidden mx-auto my-3.5   min-h-20" radius="lg">
+                                <Card className="w-full overflow-hidden mx-auto my-3.5 shadow-none   min-h-20" radius="lg">
 
                                     <div className="space-y-3">
                                         <Skeleton className="w-3/5 rounded-lg my-2.5">
@@ -363,12 +388,23 @@ export default function CardPost({ post, cart }) {
                                                 <p className="text-sm">{comment.content}</p>
                                                 <Image src={comment?.image} alt="" />
                                                 {comment.commentCreator?._id === user.id && (
-                                                    <button
-                                                        className="text-red-600 text-sm font-semibold ml-2 hover:underline"
-                                                        onClick={() => handelDeleteComent(comment._id)}
-                                                    >
-                                                        Delete
-                                                    </button>
+                                                    <>
+
+                                                        <button
+                                                            className="text-red-600 text-sm font-semibold mx-5 hover:underline"
+                                                            onClick={() => handelDeleteComent(comment._id)}
+                                                        >
+                                                            Delete
+                                                        </button><button
+                                                            className="text-blue-600 text-sm  font-semibold ml-2 hover:underline"
+                                                            onClick={() => {
+                                                                setSelectedComment(comment);
+                                                                setcommentModel(true);
+                                                            }}
+                                                        >
+                                                            Edite
+                                                        </button>
+                                                    </>
                                                 )}
                                             </div>
                                         </div>
