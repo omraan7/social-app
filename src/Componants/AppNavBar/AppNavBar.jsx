@@ -53,15 +53,15 @@ export default function AppNavBar() {
                         OMRAN...
                     </NavbarBrand>
 
-                    <NavbarItem className= "hidden  md:flex w-full  mx-auto space-x-5  justify-center items-center ">
-                        {token && <NavLink className={({ isActive }) => `text-xl  transition-all duration-700  ${isActive ? "text-blue-500 text-3xl" : ""}     `} to="posts">
+                    <NavbarItem className= "hidden  md:flex w-full  mx-auto space-x-5   justify-center items-center ">
+                        {token && <NavLink className={({ isActive }) => ` py-1.5 px-2 text-xl  transition-all duration-700  ${isActive ? "text-blue-500 py-1.5 px-2 bg-blue-300 rounded-xl" : ""}     `} to="posts">
                             Posts
                         </NavLink>
                         }
-                        <NavLink className={({ isActive }) => `text-xl  transition-all duration-700  ${isActive ? "text-blue-500 text-3xl" : ""}   `} to="/profile">
+                        <NavLink className={({ isActive }) => ` py-1.5 px-2 text-xl  transition-all duration-700  ${isActive ? "text-blue-500 py-1.5 px-2 bg-blue-300 rounded-xl" : ""}   `} to="/profile">
                             Profile
                         </NavLink> 
-                         <NavLink className={({ isActive }) => `text-xl  transition-all duration-700  ${isActive ? "text-blue-500 text-3xl" : ""}   `} to="/pro">
+                         <NavLink className={({ isActive }) => ` py-1.5 px-2 text-xl  transition-all duration-700  ${isActive ? "text-blue-500 py-1.5 px-2 bg-blue-300 rounded-xl" : ""}   `} to="/pro">
                             Notifications
                         </NavLink>
                         
