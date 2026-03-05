@@ -14,12 +14,12 @@
 //     const imgUplode = useRef()
 //     function handelimg(e) {
 //         setimg(e.target.files[0])
-        
-        
+
+
 //     }
-    
+
 //      async function sendComent() {
-        
+
 //       const myformdata = new FormData()
 //         myformdata.append("content", CommantUplode.current.value)
 //         if (img) {
@@ -113,7 +113,7 @@ export default function Createcomment({ postid }) {
             )
         },
 
-   
+
         onMutate: async (formData) => {
 
             await queryClient.cancelQueries(["comments", postid])
@@ -127,7 +127,7 @@ export default function Createcomment({ postid }) {
                 createdBy: user,
                 createdAt: new Date().toISOString()
             }
- 
+
             queryClient.setQueryData(["comments", postid], old =>
                 old ? [newComment, ...old] : [newComment]
             )
@@ -138,15 +138,15 @@ export default function Createcomment({ postid }) {
             return { prevComments }
         },
 
-      onSuccess: (res) => {
-  toast.success(res.data.message || "Comment added successfully");
-},
+        onSuccess: (res) => {
+            toast.success(res.data.message || "Comment added successfully");
+        },
         onError: (err, _, context) => {
             queryClient.setQueryData(["comments", postid], context.prevComments)
             toast.error(err.response?.data?.error || "Failed to add comment")
         },
 
-        
+
         onSettled: () => {
             queryClient.invalidateQueries(["comments", postid])
         }
@@ -154,13 +154,13 @@ export default function Createcomment({ postid }) {
 
     function sendComent() {
         const myformdata = new FormData()
-       if (CommantUplode.current.value) myformdata.append("content", CommantUplode.current.value)
+        if (CommantUplode.current.value) myformdata.append("content", CommantUplode.current.value)
         if (img) myformdata.append("image", img)
 
         mutation.mutate(myformdata)
         // toast.success("تم التعليق")
-              
-        
+
+
     }
 
     return (

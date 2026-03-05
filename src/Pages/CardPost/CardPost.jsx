@@ -1,7 +1,7 @@
 import { Card, CardHeader, CardBody, CardFooter, Avatar, Button, User, Skeleton, Image } from "@heroui/react"
-import { useContext, useState } from "react";
+import { use, useContext, useState } from "react";
 import { authcontext } from "../../context/Authcontext";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { Link } from "react-router";
 import axios from "axios";
@@ -9,6 +9,7 @@ import Createcomment from "../../Componants/createcomment/Createcomment";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, } from "@heroui/react";
 import EditPostmodel from "../../Componants/EditPostModal/EditPostmodel";
 import EditCommentmodel from "../../Componants/EditCommentModal/EditCommentmodel";
+import toast from "react-hot-toast";
 
 
 
@@ -17,7 +18,6 @@ export default function CardPost({ post, cart }) {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [SelectedComment, setSelectedComment] = useState(null)
 
-    console.log(post);
 
 
 
@@ -152,7 +152,28 @@ export default function CardPost({ post, cart }) {
             }
         }
     }
+    const mutate = useMutation({
+        mutationFn: (data) =>
+            axios.post(
+                `${import.meta.env.VITE_API_URL}posts/${post.id}/share`,
+                data,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            ),
 
+        onSuccess: () => {
+            toast.success("Post shared successfully");
+                            queryClient.invalidateQueries(["posts"]);
+
+        },
+    }); function sharePost() {
+        mutate.mutate({
+            body: "Sharing this great post @mentor_user",
+        });
+    }
 
 
     // if (isLoading) {
@@ -260,10 +281,51 @@ export default function CardPost({ post, cart }) {
                 </CardHeader>
                 <EditPostmodel post={post} isEditModalOpen={isEditModalOpen} setIsEditModalOpen={setIsEditModalOpen} />
 
-                <CardBody className="  px-3 py-5 text-small text-default-900">
-                    <p className="mb-2.5 ">{post.body}</p>
-                    {post.image && <Image className="     " src={post.image} alt={post.body} />}
+                <CardBody className="px-3 py-5 text-small text-default-900">
 
+                    <p className="mb-2.5">{post.body}</p>
+
+                    {post.image && (
+                        <Image src={post.image} alt={post.body} />
+                    )}
+
+                    {/* Shared Post */}
+                    {post.sharedPost && (
+                        <Card className="mt-4 border border-gray-200 shadow-none">
+                            <CardHeader>
+                                <div className="flex gap-3 items-center w-full">
+                                    <Avatar
+                                        src={post.sharedPost.user.photo}
+                                        size="sm"
+                                    />
+                                    <div>
+                                        <p className="text-sm font-semibold">
+                                            {post.sharedPost.user.name}
+                                        </p>
+                                        <p className="text-xs text-gray-400">
+                                            {timeAgo(post.sharedPost.createdAt)}
+                                        </p>
+                                    </div>
+                                    <Link className="ml-auto" to={`/DetailsPost/${post.sharedPost._id}`} > <h5 className="text-small text-end mr-5 font-semibold  text-sky-600  ">more details</h5></Link>
+                                    
+                                </div>
+                            </CardHeader>
+
+                            <CardBody>
+                                <p>{post.sharedPost.body}</p>
+
+                                {post.sharedPost.image && (
+                                    <Image
+                                        src={post.sharedPost.image}
+                                        alt=""
+                                        className="mt-2 rounded-xl"
+                                    />
+                                )}
+                                
+                            </CardBody>
+                            
+                        </Card>
+                    )}
 
                 </CardBody>
                 <Link to={`/DetailsPost/${post._id}`} state={{ from: location.pathname }}> <h5 className="text-small text-end mr-5 font-semibold  text-sky-600  ">more details</h5></Link>
@@ -272,7 +334,7 @@ export default function CardPost({ post, cart }) {
                     <div className="gap-10 grid grid-cols-3">
                         <Button
 
-                            className="bg-transparent text-foreground border border-gray-400"
+                            className="bg-transparent text-foreground border-1.5 border-gray-400 hover:bg-blue-200 hover:border-blue-600 hover:border-1.5"
                             color="primary"
                             radius="full"
                             size="sm"
@@ -282,7 +344,7 @@ export default function CardPost({ post, cart }) {
                             {post?.likesCount}  Like
                         </Button>
                         <Button
-                            className="bg-transparent text-foreground border border-gray-400"
+                            className="bg-transparent text-foreground border-1.5 border-gray-400 hover:bg-blue-200 hover:border-blue-600 hover:border-1.5"
                             color="primary"
                             radius="full"
                             size="sm"
@@ -292,12 +354,12 @@ export default function CardPost({ post, cart }) {
                             {post?.commentsCount + (post?.topComment ? 1 : 0)}   comment
                         </Button>
                         <Button
-                            className="bg-transparent text-foreground border border-gray-400"
+                            className="bg-transparent text-foreground border-1.5 border-gray-400 hover:bg-blue-200 hover:border-blue-600 hover:border-1.5"
                             color="primary"
                             radius="full"
                             size="sm"
                             variant="bordered"
-
+                            onClick={sharePost}
                         >
                             {post?.sharesCount}   share
                         </Button>

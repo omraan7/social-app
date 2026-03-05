@@ -83,75 +83,71 @@ export default function Posts() {
   if (isError) {
     return <h1 className="flex justify-center  items-center h-screen">{`error ${error.message}`}</h1>
   }
-  
+
   return (
     <>
-     <section className="  flex flex-col md:flex-row gap-6 px-4 sm:px-6 md:px-0">
-  {/* Sidebar Menu */}
-  <div className=" min-h-screen w-full md:w-1/4">
-    <div className="w-full text-center">
-      <div className="bg-white rounded-2xl shadow-md p-4 w-full">
-        <div className="space-y-2 flex flex-col gap-2.5">
-          <NavLink
-            to="/feed"
-            className={({ isActive }) =>
-              `flex gap-2 items-center justify-start p-2 rounded-lg transition-colors ${
-                isActive ? "bg-blue-100 text-blue-600 font-medium" : "text-gray-700"
-              }`
-            }
-          >
-            <span><NewspaperIcon size={20} /></span> feed
-          </NavLink>
-          <NavLink
-            to="/myposts"
-            className={({ isActive }) =>
-              `flex gap-2 items-center justify-start p-2 rounded-lg transition-colors ${
-                isActive ? "bg-blue-100 text-blue-600 font-medium" : "text-gray-700"
-              }`
-            }
-          >
-            <span><SparklesIcon size={20} /></span> My Posts
-          </NavLink>
-          <NavLink
-            to="/profile"
-            className={({ isActive }) =>
-              `flex gap-2 items-center justify-start p-2 rounded-lg transition-colors ${
-                isActive ? "bg-blue-100 text-blue-600 font-medium" : "text-gray-700"
-              }`
-            }
-          >
-            <span><Globe2 size={20} /></span> Community
-          </NavLink>
-          <NavLink
-            to="/saved"
-            className={({ isActive }) =>
-              `flex gap-2 items-center justify-start p-2 rounded-lg transition-colors ${
-                isActive ? "bg-blue-100 text-blue-600 font-medium" : "text-gray-700"
-              }`
-            }
-          >
-            <span><BookmarkCheck size={20} /></span> Saved
-          </NavLink>
+      <section className=" container mx-auto bg-amber-950 flex flex-col md:flex-row gap-6 px-4 sm:px-6 md:px-0">
+        {/* Sidebar Menu */}
+        <div className=" mt-1.5 md:min-h-screen w-full md:w-1/4">
+          <div className="w-full text-center">
+            <div className="bg-white rounded-2xl shadow-md p-4 w-full">
+              <div className="   grid grid-cols-2 justify-center items-center md:space-y-2 md:flex md:flex-col md:gap-2.5">
+                <NavLink
+                  to="/feed"
+                  className={({ isActive }) =>
+                    `flex gap-2 items-center justify-start p-2 rounded-lg transition-colors ${isActive ? "bg-blue-100 text-blue-600 font-medium" : "text-gray-700"
+                    }`
+                  }
+                >
+                  <span><NewspaperIcon size={20} /></span> feed
+                </NavLink>
+                <NavLink
+                  to="/myposts"
+                  className={({ isActive }) =>
+                    `flex gap-2 items-center justify-start p-2 rounded-lg transition-colors ${isActive ? "bg-blue-100 text-blue-600 font-medium" : "text-gray-700"
+                    }`
+                  }
+                >
+                  <span><SparklesIcon size={20} /></span> My Posts
+                </NavLink>
+                <NavLink
+                  to="/profile"
+                  className={({ isActive }) =>
+                    `flex gap-2 items-center justify-start p-2 rounded-lg transition-colors ${isActive ? "bg-blue-100 text-blue-600 font-medium" : "text-gray-700"
+                    }`
+                  }
+                >
+                  <span><Globe2 size={20} /></span> Community
+                </NavLink>
+                <NavLink
+                  to="/saved"
+                  className={({ isActive }) =>
+                    `flex gap-2 items-center justify-start p-2 rounded-lg transition-colors ${isActive ? "bg-blue-100 text-blue-600 font-medium" : "text-gray-700"
+                    }`
+                  }
+                >
+                  <span><BookmarkCheck size={20} /></span> Saved
+                </NavLink>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  {/* Main Feed */}
-  <div className="w-full md:w-2/4">
-    <CreatePost />
-    {data?.data?.data?.posts?.map((post) => (
-      <CardPost key={post._id} post={post} />
-    ))}
-  </div>
+        {/* Main Feed */}
+        <div className="w-full md:w-2/4">
+          <CreatePost />
+          {data?.data?.data?.posts?.map((post) => (
+            <CardPost key={post._id} post={post} />
+          ))}
+        </div>
 
-  {/* Right Sidebar */}
-  <div className="min-h-screen hidden md:block md:w-1/4 relative">
-    <div className="h-full sticky top-6 w-full">
-      <FollowSuggestions />
-    </div>
-  </div>
-</section>
+        {/* Right Sidebar */}
+        <div className="min-h-screen hidden md:block md:w-1/4 relative">
+          <div className="h-full sticky top-6 w-full">
+            <FollowSuggestions />
+          </div>
+        </div>
+      </section>
     </>
   )
 }
