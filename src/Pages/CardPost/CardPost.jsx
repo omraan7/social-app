@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardBody, CardFooter, Avatar, Button, User, Skeleton, Image } from "@heroui/react"
-import { use, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { authcontext } from "../../context/Authcontext";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
@@ -95,7 +95,6 @@ export default function CardPost({ post, cart }) {
         select: (res) => res.data.data.comments
 
     })
-    console.log(data);
 
 
     // async function handelDeleteComent() {
@@ -166,7 +165,7 @@ export default function CardPost({ post, cart }) {
 
         onSuccess: () => {
             toast.success("Post shared successfully");
-                            queryClient.invalidateQueries(["posts"]);
+            queryClient.invalidateQueries(["posts"]);
 
         },
     }); function sharePost() {
@@ -174,8 +173,27 @@ export default function CardPost({ post, cart }) {
             body: "Sharing this great post @mentor_user",
         });
     }
+    const mutate2 = useMutation({
+        mutationFn: (data) =>
+            axios.put(
+                `${import.meta.env.VITE_API_URL}posts/${post.id}/like`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            ),
+        onSuccess: () => {
+            toast.success("Post liked successfully");
+            queryClient.invalidateQueries(["posts"]);
+        },
+    })
 
+    function likePost() {
+        mutate2.mutate();
 
+    }
     // if (isLoading) {
     //     return <Skeletonn  page={3}/>
 
@@ -185,26 +203,26 @@ export default function CardPost({ post, cart }) {
     }
     async function HanselDeleatePost() {
         const result = await Swal.fire({
-            title: 'هل أنت متأكد؟',
-            text: "البوست هيتم حذفه نهائيًا!",
+            title: 'do you want to delete this post?',
+            text: "the post will be deleted!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'نعم، احذفه!',
-            cancelButtonText: 'إلغاء'
+            confirmButtonText: 'delete',
+            cancelButtonText: 'cancel'
         });
 
         if (result.isConfirmed) {
             try {
                 await axios.delete(`${import.meta.env.VITE_API_URL}posts/${post.id}`, { headers: { Authorization: `Bearer ${token}` } })
                 queryClient.invalidateQueries(["myPosts"])
-                Swal.fire('تم الحذف!', 'البوست اتحذف بنجاح.', 'success');
+                Swal.fire('Deleted!', 'The post has been deleted.', 'success');
 
 
             } catch (err) {
                 console.error(err);
-                Swal.fire('خطأ!', 'حدث خطأ أثناء الحذف.', 'error');
+                Swal.fire('Error', 'error');
             }
         }
         // const res = await axios.delete(`${import.meta.env.VITE_API_URL}posts/${post.id}`, { headers: { Authorization: `Bearer ${token}` } })
@@ -229,7 +247,7 @@ export default function CardPost({ post, cart }) {
                 setIsOpen={setcommentModel}
             />
             <Card
-                className={`overflow-hidden mx-auto my-1.5 min-h-62
+                className={`overflow-hidden mx-auto my-1.5 min-h-62 dark:bg-gray-700  dark:text-white
   ${cart === "profile" ? "max-w-6xl" : "max-w-4xl"} `}
             >
 
@@ -250,13 +268,13 @@ export default function CardPost({ post, cart }) {
 
                     {user.id === post.user._id ? <Dropdown>
                         <DropdownTrigger>
-                            <Button variant="bordered" className="bg-transparent text-foreground border-default-200"
+                            <Button   className="bg-transparent text-foreground  text-md font-medium  "
                                 color="primary"
                                 radius="full"
                                 size="sm"
                             >  Menu</Button>
                         </DropdownTrigger>
-                        <DropdownMenu aria-label="Static Actions">
+                        <DropdownMenu    className="  p-0 m-0">
 
                             <DropdownItem key="edit" onClick={() => setIsEditModalOpen(true)}>
                                 Edit Post
@@ -306,8 +324,8 @@ export default function CardPost({ post, cart }) {
                                             {timeAgo(post.sharedPost.createdAt)}
                                         </p>
                                     </div>
-                                    <Link className="ml-auto" to={`/DetailsPost/${post.sharedPost._id}`} > <h5 className="text-small text-end mr-5 font-semibold  text-sky-600  ">more details</h5></Link>
-                                    
+                                    <Link className="ml-auto" to={`/DetailsPost/${post.sharedPost._id}`} > <h5 className="font-semibold text-md  text-gray-600  dark:text-white  text-end mr-5   ">more details</h5></Link>
+
                                 </div>
                             </CardHeader>
 
@@ -321,25 +339,25 @@ export default function CardPost({ post, cart }) {
                                         className="mt-2 rounded-xl"
                                     />
                                 )}
-                                
+
                             </CardBody>
-                            
+
                         </Card>
                     )}
 
                 </CardBody>
-                <Link to={`/DetailsPost/${post._id}`} state={{ from: location.pathname }}> <h5 className="text-small text-end mr-5 font-semibold  text-sky-600  ">more details</h5></Link>
+                <Link to={`/DetailsPost/${post._id}`} state={{ from: location.pathname }}> <h5 className="text-md text-end mr-5 font-semibold   text-md  text-gray-600  dark:text-white ">more details</h5></Link>
                 <CardFooter className="flex flex-col ">
 
                     <div className="gap-10 grid grid-cols-3">
                         <Button
 
-                            className="bg-transparent text-foreground border-1.5 border-gray-400 hover:bg-blue-200 hover:border-blue-600 hover:border-1.5"
+                            className={`bg-transparent text-foreground border-1.5 border-gray-400 hover:bg-blue-200 hover:border-blue-600 hover:border-1.5 ${post?.likes.includes(user.id) ? "bg-blue-300" : ""}    `}
                             color="primary"
                             radius="full"
                             size="sm"
                             variant="bordered"
-
+                            onClick={() => likePost()}
                         >
                             {post?.likesCount}  Like
                         </Button>
@@ -385,9 +403,9 @@ export default function CardPost({ post, cart }) {
                                     alt=""
                                 />
 
-                                <div className="bg-gray-100 rounded-2xl px-3 py-2 max-w-md">
+                                <div className="bg-gray-100 dark:bg-gray-600 rounded-2xl px-3 py-2 max-w-md">
                                     <p className="font-semibold text-sm">{post.topComment?.commentCreator?.name}</p>
-                                    <p className="text-sm text-gray-700">
+                                    <p className="text-sm  ">
                                         {post?.topComment?.content}
                                     </p>
 
@@ -434,7 +452,7 @@ export default function CardPost({ post, cart }) {
                                         </Skeleton>
                                     </div>
                                 </Card>) : (data.map((comment) => (
-                                    <div key={comment._id} className="bg-white p-0 mt-2 rounded-xl  ">
+                                    <div key={comment._id} className="bg-white  dark:bg-gray-700 dark:text-white p-0 mt-2 rounded-xl  ">
 
 
                                         <div className="flex gap-2 mb-3">
@@ -443,7 +461,7 @@ export default function CardPost({ post, cart }) {
                                                 className="w-8 h-8 rounded-full"
                                             />
 
-                                            <div className="bg-gray-100 px-3 py-2 rounded-2xl">
+                                            <div className="bg-gray-100 dark:bg-gray-600 px-3 py-2 rounded-2xl">
                                                 <p className="font-semibold text-sm">
                                                     {comment.commentCreator?.name}
                                                 </p>
@@ -478,7 +496,7 @@ export default function CardPost({ post, cart }) {
                             <Createcomment postid={post.id} />
 
                         </div>
-                        {openAllcoments ? (post?.commentsCount > 1 && <p className="text-small text-end mr-5 font-semibold  text-sky-600  cursor-pointer" onClick={() => setopenAllcoments(false)} > Hide Comments</p>) : (post?.commentsCount > 1 && <p className=" font-small  text-center mr-5 font-semibold  text-sky-600 cursor-pointer" onClick={() => setopenAllcoments(true)} > more Comments</p>)}
+                        {openAllcoments ? (post?.commentsCount > 1 && <p className=" text-end mr-5 font-semibold text-md  text-gray-600  dark:text-white cursor-pointer" onClick={() => setopenAllcoments(false)} > Hide Comments</p>) : (post?.commentsCount > 1 && <p className="  text-end mr-5 font-semibold text-md  text-gray-600  dark:text-white cursor-pointer" onClick={() => setopenAllcoments(true)} > more Comments</p>)}
 
                     </div>
                 </CardFooter>

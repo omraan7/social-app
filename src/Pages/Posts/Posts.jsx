@@ -45,7 +45,6 @@ export default function Posts() {
     })
 
   }
-  console.log(data);
 
   // try {
   //   useEffect(function ( ) {
@@ -86,7 +85,7 @@ export default function Posts() {
 
   return (
     <>
-      <section className=" container mx-auto bg-amber-950 flex flex-col md:flex-row gap-6 px-4 sm:px-6 md:px-0">
+      <section className=" container mx-auto  flex flex-col md:flex-row gap-6 px-4 sm:px-6 md:px-0">
         {/* Sidebar Menu */}
         <div className=" mt-1.5 md:min-h-screen w-full md:w-1/4">
           <div className="w-full text-center">

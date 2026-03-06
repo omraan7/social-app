@@ -171,19 +171,19 @@ export default function Createcomment({ postid }) {
                 <input
                     type="text"
                     placeholder="Add a comment..."
-                    className="flex-1 bg-gray-100 rounded-full px-2 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                    className="flex-1 bg-gray-100 dark:bg-gray-800 rounded-full px-2 py-2 outline-none focus:ring-2 focus:ring-blue-500"
                     ref={CommantUplode}
                 />
 
                 <DocumentUpload
                     size="35"
-                    className="text-blue-400"
+                    className="text-gray-400"
                     onClick={() => imgUplode.current.click()}
                 />
 
                 <Send
                     size="32"
-                    className="text-blue-400 cursor-pointer"
+                    className="text-gray-400 cursor-pointer"
                     onClick={sendComent}
                 />
 

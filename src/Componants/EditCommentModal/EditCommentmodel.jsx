@@ -9,7 +9,6 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 export default function EditCommentmodel({ isOpen, setIsOpen, comment, post }) {
-    console.log(comment);
 
 
     const imgUplode = useRef();

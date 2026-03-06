@@ -64,7 +64,7 @@ export default function CreatePost({ cart }) {
         <>
 
             {/* <div className="max-w-4xl overflow-hidden mx-auto my-1.5    bg-white p-4 rounded-xl shadow"> */}
-            <div className={`overflow-hidden mx-auto my-1.5    bg-white p-4 rounded-xl shadow ${cart == "profile" ? "max-w-5xl" : "max-w-4xl"}`}>
+            <div className={`overflow-hidden mx-auto my-1.5     bg-gray-700 text-white p-4 rounded-xl shadow ${cart == "profile" ? "max-w-5xl" : "max-w-4xl"}`}>
 
 
                 <Form onSubmit={handleSubmit(sendpost)} className="w-full">
@@ -79,12 +79,12 @@ export default function CreatePost({ cart }) {
                             {...register("body")}
                             type="text"
                             placeholder="What's on your mind?"
-                            className="flex-1 bg-gray-100 px-5 py-2 rounded-full outline-none hover:bg-gray-200 cursor-pointer"
+                            className="flex-1 bg-gray-800 px-5 py-2 rounded-md outline-none hover:bg-gray-500 cursor-pointer"
                         />
-                        <DocumentUpload size="32" className="text-blue-400" onClick={() => { imgUplode.current.click() }} />
+                        <DocumentUpload size="32" className="text-gray-800" onClick={() => { imgUplode.current.click() }} />
                         <input type="file" multiple className="hidden" onChange={Uplodimg} ref={imgUplode} />
                     </div>
-                    <button className="text-white w-full bg-blue-500 py-2 px-4 rounded-full" type="submit">post </button>
+                    <button className="text-white font-bold tracking-widest w-full bg-gray-950 py-2 px-4 rounded-full hover:bg-gray-800" type="submit">post </button>
                     {img && (
                         <Image
                             src={URL.createObjectURL(img)}

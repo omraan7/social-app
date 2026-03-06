@@ -23,7 +23,7 @@ export default function Skeletonn({ page }) {
   }
 
   if (page == 5) {
-    return <Card className="max-w-75 overflow-hidden mx-auto my-3.5   min-h-62" radius="lg">
+    return <Card className="max-w-75  p-5 overflow-hidden mx-auto my-3.5   min-h-62" radius="lg">
       <Skeleton className="rounded-lg my-2.5">
         <div className="h-5 rounded-lg bg-default-300" />
       </Skeleton>
@@ -67,19 +67,19 @@ export default function Skeletonn({ page }) {
 
 
   if (page == 4) {
-    return <Card className="max-w-5xl   mt-6  rounded-xl overflow-hidden mx-auto     min-h-96" radius="lg">
-      <Skeleton className="rounded-lg my-2.5">
-        <div className="h-24 rounded-lg bg-default-300" />
+    return <Card className="max-w-5xl bg-gray-700  mt-6  rounded-xl overflow-hidden mx-auto     min-h-96" radius="lg">
+      <Skeleton className="rounded-lg my-2.5  bg-gray-600">
+        <div className="h-24 rounded-lg bg-gray-200" />
       </Skeleton>
       <div className="space-y-3">
-        <Skeleton className="w-3/5 rounded-lg my-2.5">
-          <div className="h-3 w-3/5 rounded-lg bg-default-200" />
+        <Skeleton className="w-3/5 rounded-lg my-2.5  bg-gray-600">
+          <div className="h-3 w-3/5 rounded-lg bg-gray-200" />
         </Skeleton>
-        <Skeleton className="w-4/5 rounded-lg my-2.5">
-          <div className="h-3 w-4/5 rounded-lg bg-default-200" />
+        <Skeleton className="w-4/5 rounded-lg my-2.5  bg-gray-600">
+          <div className="h-3 w-4/5 rounded-lg bg-gray-200" />
         </Skeleton>
-        <Skeleton className="w-2/5 rounded-lg my-2.5">
-          <div className="h-3 w-2/5 rounded-lg bg-default-300" />
+        <Skeleton className="w-2/5 rounded-lg my-2.5  bg-gray-600">
+          <div className="h-3 w-2/5 rounded-lg bg-gray-200" />
         </Skeleton>
       </div>
     </Card>

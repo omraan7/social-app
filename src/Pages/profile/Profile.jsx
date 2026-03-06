@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react"
+import { useContext, useRef } from "react"
 import { authcontext } from "../../context/Authcontext"
 import { useQuery } from "@tanstack/react-query"
 import Skeletonn from "../../Componants/Skeleton/Skeleton"
@@ -6,7 +6,6 @@ import { Camera } from "iconsax-reactjs"
 import axios from "axios"
 import toast from "react-hot-toast"
 import CardPost from "../CardPost/CardPost"
-import { da } from "zod/v4/locales"
 import CreatePost from "../../Componants/createpost/CreatePost"
 
 export default function Profile() {
@@ -14,6 +13,8 @@ export default function Profile() {
 
 
   const { user, token, userData } = useContext(authcontext)
+  console.log(user);
+
 
   const imgUplode = useRef()
   async function handelprofileimg(e) {
@@ -44,7 +45,6 @@ export default function Profile() {
   })
 
 
-  console.log(data);
 
 
 
@@ -72,16 +72,16 @@ export default function Profile() {
     </div>
   
    */}
-    <div className="bg-gray-100 min-h-screen pb-10">
+    <div className="bg-gray-900 min-h-screen pb-10">
 
       {/* cover */}
-      <div className="h-60 w-full bg-linear-to-b from-blue-900 to-blue-400 rounded-b-3xl"></div>
+      <div className="h-60 w-full bg-linear-to-b from-gray-900 to-gray-800 rounded-b-3xl"></div>
 
       {/* profile card */}
-      <div className="max-w-5xl mx-auto -mt-24 bg-white rounded-3xl shadow p-6">
+      <div className="max-w-5xl mx-auto -mt-24 bg-gray-700 rounded-3xl shadow p-6">
 
         {/* top section */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 ">
 
           {/* left */}
           <div className="flex items-center gap-4">
@@ -90,24 +90,33 @@ export default function Profile() {
               className="w-24 h-24 rounded-full border-4 border-white shadow"
               alt=""
             />
-            <Camera size="33" color="#555555" onClick={() => imgUplode.current.click()} />
+            <Camera size="33" color="#fff" onClick={() => imgUplode.current.click()} />
             {/* <img src={  URL.createObjectURL(user?.photo)} alt="" /> */}
             <input type="file" className="hidden" onChange={handelprofileimg} ref={imgUplode} />
             <div>
-              <h2 className="text-2xl font-bold"> </h2>
-              <p className="text-gray-500"> </p>
+              <h2 className="text-2xl font-bold text-white "> {user?.name}</h2>
+              <p className="text-gray-400">  {user?.username}</p>
 
-              <span className="inline-block mt-2 text-sm bg-blue-100 text-blue-600 px-3 py-1 rounded-full">
-                {user?.name}
-              </span>  <span className="inline-block mt-2 text-sm bg-blue-100 text-blue-600 px-3 py-1 rounded-full">
-                {user?.username}
-              </span>
+             
             </div>
           </div>
 
           {/* stats */}
-          <span>      {new Date(user?.createdAt).toDateString()}</span>
-          <span>      {new Date(user?.dateOfBirth).toDateString()}</span>
+          <div className="flex items-center gap-3 ">
+
+            <div className="flex items-center bg-gray-600 text-white px-3 py-2 rounded-2xl gap-4 text-sm font-bold"> Following
+              <div className=" text-lg">
+                {user?.followingCount}
+              </div>
+            </div >
+            <div className="flex items-center bg-gray-600 text-white px-3 py-2 rounded-2xl gap-4 text-sm font-bold"> followers
+              <div className=" text-lg">
+                {user?.followersCount}
+              </div>
+            </div >
+
+          </div>
+
 
         </div>
 
@@ -115,46 +124,52 @@ export default function Profile() {
         <div className="grid md:grid-cols-2 gap-6 mt-6">
 
           {/* about */}
-          <div className="bg-gray-50 rounded-xl p-5">
+          <div className=" bg-gray-600 text-white  rounded-xl p-5">
             <h3 className="font-semibold mb-3">About</h3>
 
-            <p className="text-gray-600 text-sm mb-2">
 
-            </p>
-
-            <p className="text-gray-600 text-sm">
+            <p className="text-white text-sm">
+              <span className=" text-white text-lg font-bold">Email: </span>
               {user?.email}
             </p>
+            <p className="text-white text-sm">
+              <span className=" text-white text-lg font-bold"> Date Of Birth: </span>
+
+              {new Date(user?.dateOfBirth).toDateString()}         </p>
           </div>
 
           {/* right stats */}
-          dsf
+          <div className="flex items-center justify-center bg-gray-600 text-white px-3 py-2 rounded-2xl gap-4 text-sm font-bold">     My Posts
+            <div className=" text-lg">
+              {data?.length}
+            </div>
+          </div >
+
         </div>
       </div>
 
       {/* tabs */}
-      <div className="max-w-5xl mx-auto mt-6 bg-white rounded-xl shadow p-3 flex gap-3">
-        <button className="px-4 py-2 bg-blue-100 text-blue-600 rounded-lg font-medium">
+
+
+      <div className=" my-5">
+        <CreatePost cart="profile" />
+
+
+      </div>
+      <div className="max-w-5xl mx-auto mt-6 bg-gray-700 text-white rounded-xl shadow p-3    flex gap-3">
+        <button className="px-4 py-2 bg-gray-900 text-white rounded-lg font-medium">
           My Posts
         </button>
-
-        <button className="px-4 py-2 text-gray-500 hover:bg-gray-100 rounded-lg">
-          Saved
-        </button>
-      </div>
-
-      <div className="">
-<CreatePost cart="profile"/>
 
 
       </div>
       <div className="max-w-5xl mx-auto mt-6 rounded-xl">
         {data?.length ? (
           data.map((post) => (
-            <CardPost key={post._id} post={post} cart="profile"  />
+            <CardPost key={post._id} post={post} cart="profile" />
           ))
         ) : (
-          <p className="text-center text-gray-500 py-10">No posts yet</p>
+          <p className="text-center text-gray-100 py-10">No posts yet</p>
         )}
       </div>
     </div>
