@@ -77,12 +77,12 @@ export default function EditCommentmodel({ isOpen, setIsOpen, comment, post }) {
         >
             <form onSubmit={handleSubmit(sendcomment)} >
                 <ModalContent>
-                    <ModalHeader>Update Post</ModalHeader>
+                    <ModalHeader>Update comment</ModalHeader>
                     <ModalBody>
                         <input
                             {...register("body")}
                             type="text"
-                            placeholder="عنوان البوست"
+                            placeholder="Update a comment..."
                             className="w-full border p-2 mb-3 rounded"
                         />
                         <Image

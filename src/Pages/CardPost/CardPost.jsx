@@ -173,22 +173,89 @@ export default function CardPost({ post, cart }) {
             body: "Sharing this great post @mentor_user",
         });
     }
-    const mutate2 = useMutation({
-        mutationFn: (data) =>
-            axios.put(
-                `${import.meta.env.VITE_API_URL}posts/${post.id}/like`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
+const mutate2 = useMutation({
+    mutationFn: () =>
+        axios.put(
+            `${import.meta.env.VITE_API_URL}posts/${post.id}/like`,
+            {},
+            { headers: { Authorization: `Bearer ${token}` } }
+        ),
+
+    onMutate: async () => {
+        await queryClient.cancelQueries(["posts"]);
+        await queryClient.cancelQueries(["myPosts"]);
+
+        const previousPosts = queryClient.getQueryData(["posts"]);
+        const previousMyPosts = queryClient.getQueryData(["myPosts"]);
+
+        // تحديث posts
+        queryClient.setQueryData(["posts"], (old) => {
+            if (!old) return old;
+            return {
+                ...old,
+                data: {
+                    ...old.data,
+                    data: {
+                        ...old.data.data,
+                        posts: old.data.data.posts.map((p) =>
+                            p.id === post.id
+                                ? {
+                                    ...p,
+                                    likes: p.likes.includes(user.id)
+                                        ? p.likes.filter((id) => id !== user.id)
+                                        : [...p.likes, user.id],
+                                    likesCount: p.likes.includes(user.id)
+                                        ? p.likesCount - 1
+                                        : p.likesCount + 1,
+                                }
+                                : p
+                        ),
                     },
-                }
-            ),
-        onSuccess: () => {
-            toast.success("Post liked successfully");
-            queryClient.invalidateQueries(["posts"]);
-        },
-    })
+                },
+            };
+        });
+
+        // تحديث myPosts
+        queryClient.setQueryData(["myPosts"], (old) => {
+            if (!old) return old;
+            return {
+                ...old,
+                data: {
+                    ...old.data,
+                    data: {
+                        ...old.data.data,
+                        posts: old.data.data.posts.map((p) =>
+                            p.id === post.id
+                                ? {
+                                    ...p,
+                                    likes: p.likes.includes(user.id)
+                                        ? p.likes.filter((id) => id !== user.id)
+                                        : [...p.likes, user.id],
+                                    likesCount: p.likes.includes(user.id)
+                                        ? p.likesCount - 1
+                                        : p.likesCount + 1,
+                                }
+                                : p
+                        ),
+                    },
+                },
+            };
+        });
+
+        return { previousPosts, previousMyPosts };
+    },
+
+    onError: (err, variables, context) => {
+        queryClient.setQueryData(["posts"], context.previousPosts);
+        queryClient.setQueryData(["myPosts"], context.previousMyPosts);
+        toast.error("Something went wrong");
+    },
+
+    onSettled: () => {
+        queryClient.invalidateQueries(["posts"]);
+        queryClient.invalidateQueries(["myPosts"]);
+    },
+});
 
     function likePost() {
         mutate2.mutate();
@@ -286,11 +353,10 @@ export default function CardPost({ post, cart }) {
 
                         </DropdownMenu>
                     </Dropdown> : <Button
-                        className="bg-blue-500 text-foreground "
+                        className="dark:bg-gray-500 text-foreground "
                         color="primary"
-                        radius="full"
+                        radius=""
                         size="sm"
-                        variant="bordered"
 
                     >
                         Follow
@@ -309,7 +375,7 @@ export default function CardPost({ post, cart }) {
 
                     {/* Shared Post */}
                     {post.sharedPost && (
-                        <Card className="mt-4 border border-gray-200 shadow-none">
+                        <Card className="mt-4 border border-gray-200 dark:border-gray-900 dark:bg-gray-800 shadow-none">
                             <CardHeader>
                                 <div className="flex gap-3 items-center w-full">
                                     <Avatar

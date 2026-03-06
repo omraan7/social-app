@@ -31,7 +31,7 @@ export default function Profile() {
 
       console.log(res);
     } catch (error) {
-      // //  toast.error(error.response.data.error)
+      //  toast.error(error.response.data.error)
       // console.log(error.response.data.error);
 
     }

@@ -86,24 +86,24 @@ export default function Posts() {
   return (
     <>
       <section className=" container mx-auto  flex flex-col md:flex-row gap-6 px-4 sm:px-6 md:px-0">
-        {/* Sidebar Menu */}
+
         <div className=" mt-1.5 md:min-h-screen w-full md:w-1/4">
-          <div className="w-full text-center">
-            <div className="bg-white rounded-2xl shadow-md p-4 w-full">
-              <div className="   grid grid-cols-2 justify-center items-center md:space-y-2 md:flex md:flex-col md:gap-2.5">
+          <div className="w-full text-center  sticky top-17">
+            <div className="bg-white dark:bg-gray-700  rounded-2xl shadow-md p-4 w-full">
+              <div className="   grid grid-cols-2 justify-center items-start md:space-y-2 md:flex md:flex-col md:gap-2.5">
                 <NavLink
-                  to="/feed"
+                  to="/profile"
                   className={({ isActive }) =>
-                    `flex gap-2 items-center justify-start p-2 rounded-lg transition-colors ${isActive ? "bg-blue-100 text-blue-600 font-medium" : "text-gray-700"
+                    `flex gap-2 items-center justify-start p-2 rounded-lg transition-colors dark:text-gray-200 ${isActive ? "bg-gray-200 text-gray-600 dark:bg-gray-800 dark:text-gray-200 font-medium" : "text-gray-700"
                     }`
                   }
                 >
                   <span><NewspaperIcon size={20} /></span> feed
                 </NavLink>
                 <NavLink
-                  to="/myposts"
+                  to="/posts"
                   className={({ isActive }) =>
-                    `flex gap-2 items-center justify-start p-2 rounded-lg transition-colors ${isActive ? "bg-blue-100 text-blue-600 font-medium" : "text-gray-700"
+                    `w-full flex gap-2 items-center justify-start p-2 rounded-lg transition-colors  dark:text-gray-200${isActive ? "bg-gray-200 text-gray-600 dark:bg-gray-800 dark:text-gray-200  font-medium" : "text-gray-700"
                     }`
                   }
                 >
@@ -112,16 +112,16 @@ export default function Posts() {
                 <NavLink
                   to="/profile"
                   className={({ isActive }) =>
-                    `flex gap-2 items-center justify-start p-2 rounded-lg transition-colors ${isActive ? "bg-blue-100 text-blue-600 font-medium" : "text-gray-700"
+                    `flex gap-2 items-center justify-start p-2 rounded-lg transition-colors dark:text-gray-200 ${isActive ? "bg-gray-900 text-gray-600 font-medium" : "text-gray-700"
                     }`
                   }
                 >
                   <span><Globe2 size={20} /></span> Community
                 </NavLink>
                 <NavLink
-                  to="/saved"
+                  to="/profile"
                   className={({ isActive }) =>
-                    `flex gap-2 items-center justify-start p-2 rounded-lg transition-colors ${isActive ? "bg-blue-100 text-blue-600 font-medium" : "text-gray-700"
+                    `flex gap-2 items-center justify-start p-2 rounded-lg transition-colors dark:text-gray-200 ${isActive ? "bg-gray-200 text-gray-600 font-medium" : "text-gray-700"
                     }`
                   }
                 >
@@ -140,9 +140,9 @@ export default function Posts() {
           ))}
         </div>
 
-        {/* Right Sidebar */}
-        <div className="min-h-screen hidden md:block md:w-1/4 relative">
-          <div className="h-full sticky top-6 w-full">
+
+        <div className="hidden md:block md:w-1/4">
+          <div className="sticky top-17">
             <FollowSuggestions />
           </div>
         </div>

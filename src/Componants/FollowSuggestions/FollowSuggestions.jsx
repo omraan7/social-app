@@ -14,8 +14,6 @@ export default function FollowSuggestions() {
     enabled: !!token,
     select: (res) =>  res.data.data.suggestions
   });
-console.log();
-
   function getSuggestions() {
     return axios.get(
       `${import.meta.env.VITE_API_URL}users/suggestions?limit=10`,
@@ -40,7 +38,7 @@ console.log();
   }
 
   return (
-    <div className="bg-white shadow rounded-xl p-4   ">
+    <div className="bg-white text-gray-800 dark:bg-gray-700 dark:text-gray-200 shadow rounded-xl p-4   ">
       <h2 className="font-bold text-lg mb-3">Suggested Friends</h2>
 
       <div className="space-y-3">
@@ -57,12 +55,14 @@ console.log();
                 className="w-10 h-10 rounded-full object-cover"
               />
               <div>
-                <p className="font-medium">{user.name}</p>
-                <p className="text-sm text-gray-500">@{user.username}</p>
+                <p className="font-medium">{user.name}</p>  
+                <p className="text-sm text-gray-500">@{user.name}</p>       
+                      <p className="text-xs text-gray-500"> Followers {user.followersCount}</p> 
+
               </div>
             </div>
 
-            <button className="px-3 py-1 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+            <button className="px-3 py-1 text-sm bg-primary dark:bg-gray-300 dark:text-gray-800 rounded-lg hover:bg-blue-600">
               Follow
             </button>
           </div>

@@ -7,7 +7,7 @@ export default function Layout() {
 <>
 <main>
     <AppNavBar />
- <div className="min-h-screen  bg-gray-300  overflow-auto" >
+ <div className="min-h-screen  bg-gray-300 text-gray-900 dark:bg-gray-900 dark:text-whit" >
         
        <Outlet />
  </div>
