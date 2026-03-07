@@ -52,8 +52,7 @@ export default function ChangePassword() {
             );
             console.log(res);
 
-            // حفظ التوكن الجديد
-            localStorage.setItem("token", res.data.token);
+             localStorage.setItem("token", res.data.token);
 
             toast.success("Password updated successfully ✅",);
 
@@ -78,16 +77,16 @@ export default function ChangePassword() {
                     <label className="text-gray-700 mb-3" htmlFor="old password">Current password</label>
                     <Input
                         id="old password"
-                             type={show ? "text" : "password"}
+                        type={show ? "text" : "password"}
                         placeholder="Current password"
                         {...register("password")}
                         className="w-full border rounded-lg p-2"
                         required={true}
                         endContent={
-        <button type="button" onClick={() => setShow(!show)}>
-          {show ? <EyeOff size={18} /> : <Eye size={18} />}
-        </button>
-      }
+                            <button type="button" onClick={() => setShow(!show)}>
+                                {show ? <EyeOff size={18} /> : <Eye size={18} />}
+                            </button>
+                        }
                     />
                     {errors.password && (
                         <p className="text-red-500 mt-2 text-sm  ">

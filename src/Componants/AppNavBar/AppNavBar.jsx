@@ -19,7 +19,8 @@ import { Link, NavLink } from "react-router";
 import { authcontext } from "../../context/Authcontext";
 
 export default function AppNavBar() {
-    const [dark, setDark] = useState(false);
+    const [dark, setDark] = useState((() => localStorage.getItem("dark")) );
+    const { user,token, settoken } = useContext(authcontext)
 
     useEffect(() => {
         if (dark) {
@@ -28,17 +29,16 @@ export default function AppNavBar() {
             document.documentElement.classList.remove("dark");
         }
     }, [dark]);
+    localStorage.setItem("dark", dark);
     function logout() {
         localStorage.removeItem("token")
         settoken(null)
     }
-    const { user } = useContext(authcontext)
 
 
 
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const { token } = useContext(authcontext)
     return (
         <>
             {token && <Navbar className= "bg-transparent dark:bg-gray-900 dark:text-white"  isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>

@@ -73,67 +73,41 @@ export default function Login() {
   }
   return (
     <>
-      <div className="flex sm:flex-col bg-amber-950">
-        {/* <div className="w-[50%]  bg-blue-100 p-10">
-          <Link>
-            <span className="py-4 px-5 font-bold text-white rounded-xl bg-[#7EA0F0]">S</span>
-            <span className="pl-5 text-2xl font-bold text-white">SocialHub</span>
-
-
-
-          </Link>
-
-
-
-
-
-
-
-        </div> */}
-        <div className="min-h-screen w-full v from-blue-700 via-blue-600 to-indigo-700 text-white flex items-center justify-center p-6">
+      <div className="container mx-auto flex flex-col md:flex-row min-h-screen">
+      
+        <div className="min-h-screen w-full md:max-w-1/2  flex items-center justify-center p-6">
           <div className="max-w-6xl w-full">
 
-            {/* Logo */}
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center font-bold text-xl">
-                S
-              </div>
-              <h2 className="text-2xl font-semibold">SocialHub</h2>
+              
+              <h2 className="text-3xl text-gray-800 dark:text-white font-bold">Omran....</h2>
             </div>
 
-            {/* Title */}
             <div className="mb-10">
-              <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+              <h1 className="text-4xl  text-gray-800 dark:text-white md:text-6xl font-bold leading-tight">
                 Welcome Back <br />
-                <span className="text-cyan-300">to SocialHub App</span>
+                <span className="text-blue-900 ">to Omran App</span>
               </h1>
-              <p className="mt-4 text-lg text-white/80">
+              <p className="mt-4 text-lg dark:text-white/80">
                 Signin to connect people all over the world
               </p>
             </div>
 
-            {/* Features */}
+            <div className="bg-whitend  text-gray-700 backdrop-blur-md border border-white/20 rounded-2xl p-6">
 
-
-            {/* Stats */}
-
-
-            {/* Testimonial */}
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6">
-
-              <p className="text-white/90 italic mb-6">
+              <p className="dark:text-white/90 italic mb-6">
                 “SocialHub has completely changed how I connect with friends and discover new communities. The experience is seamless!”
-              </p>
+              </p> 
 
               <div className="flex items-center gap-3">
                 <img
-                  src="https://i.pravatar.cc/100"
+                  src="0"
                   alt="avatar"
                   className="w-10 h-10 rounded-full"
                 />
                 <div>
-                  <p className="font-semibold">Alex Johnson</p>
-                  <p className="text-sm text-white/70">Product Designer</p>
+                  <p className=" dark:text-white font-semibold">Alex Johnson</p>
+                  <p className="text-sm dark:text-white/70">Product Designer</p>
                 </div>
               </div>
             </div>
@@ -145,15 +119,14 @@ export default function Login() {
 
 
             onSubmit={handleSubmit(handleSubmitForm)}
-            className=" w-full self-center  mx-auto p-10 mt-5 flex flex-col gap-4 bg-white shadow-teal-950/20 shadow-md rounded-2xl"
+            className=" w-full self-center  mx-auto p-10 mt-5 flex flex-col gap-4 dark:bg-gray-950 dark:text-white  bg-white shadow-teal-950/20 shadow-md rounded-2xl"
           >
-            <h2 className="text-5xl font-bold text-zinc-800 self-center">Login</h2>
-            <Link to="/register"> create account</Link>
+            <h2 className="text-5xl font-bold text-zinc-800 dark:text-white italic self-center">Login</h2>
 
             <Input
               classNames={{
-                label: "text-xl! text-[#09c]! font-bold",
-                input: "placeholder:text-[#09c] placeholder:text-lg"
+                label: "text-xl! dark:text-white! text-gray-800! font-bold",
+                input: "placeholder:text-gray-400 dark:placeholder:text-gray-200 placeholder:text-lg"
               }}
 
               {...register("email")}
@@ -169,8 +142,8 @@ export default function Login() {
             />
             <Input
               classNames={{
-                label: "text-xl! text-[#09c]! font-bold",
-                input: "placeholder:text-[#09c] placeholder:text-lg"
+                 label: "text-xl! dark:text-white! text-gray-800! font-bold",
+                input: "placeholder:text-gray-400 dark:placeholder:text-gray-200 placeholder:text-lg"
               }}
               {...register("password")}
 
@@ -198,6 +171,8 @@ export default function Login() {
 
 
             </div>
+                        <Link className="text-blue-600 underline" to="/register"> create account</Link>
+
           </Form>
 
         </div>

@@ -13,8 +13,7 @@ export default function Profile() {
 
 
   const { user, token, userData } = useContext(authcontext)
-  console.log(user);
-
+ 
 
   const imgUplode = useRef()
   async function handelprofileimg(e) {
@@ -72,19 +71,15 @@ export default function Profile() {
     </div>
   
    */}
-    <div className="bg-gray-900 min-h-screen pb-10">
+    <div className="dark:bg-gray-900 min-h-screen pb-10">
 
-      {/* cover */}
-      <div className="h-60 w-full bg-linear-to-b from-gray-900 to-gray-800 rounded-b-3xl"></div>
+      <div className="h-60 w-full bg-linear-to-b from-transparent to-gray-600 dark:from-gray-900 dark:to-gray-800 rounded-b-3xl"></div>
 
-      {/* profile card */}
-      <div className="max-w-5xl mx-auto -mt-24 bg-gray-700 rounded-3xl shadow p-6">
+      <div className="max-w-5xl mx-auto -mt-24 bg-white text-gray-800 dark:bg-gray-700 rounded-3xl shadow p-6">
 
-        {/* top section */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 ">
+         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 ">
 
-          {/* left */}
-          <div className="flex items-center gap-4">
+           <div className="flex items-center gap-4">
             <img
               src={user?.photo}
               className="w-24 h-24 rounded-full border-4 border-white shadow"
@@ -94,22 +89,21 @@ export default function Profile() {
             {/* <img src={  URL.createObjectURL(user?.photo)} alt="" /> */}
             <input type="file" className="hidden" onChange={handelprofileimg} ref={imgUplode} />
             <div>
-              <h2 className="text-2xl font-bold text-white "> {user?.name}</h2>
-              <p className="text-gray-400">  {user?.username}</p>
+              <h2 className="text-2xl font-bold dark:text-white "> {user?.name}</h2>
+              <p className="dark:text-gray-400">  {user?.username}</p>
 
              
             </div>
           </div>
 
-          {/* stats */}
-          <div className="flex items-center gap-3 ">
+           <div className="flex items-center gap-3 ">
 
-            <div className="flex items-center bg-gray-600 text-white px-3 py-2 rounded-2xl gap-4 text-sm font-bold"> Following
+            <div className="flex items-center bg-gray-300 dark:bg-gray-600 dark:text-white px-3 py-2 rounded-2xl gap-4 text-sm font-bold"> Following
               <div className=" text-lg">
                 {user?.followingCount}
               </div>
             </div >
-            <div className="flex items-center bg-gray-600 text-white px-3 py-2 rounded-2xl gap-4 text-sm font-bold"> followers
+            <div className="flex items-center  bg-gray-300 dark:bg-gray-600 dark:text-white px-3 py-2 rounded-2xl gap-4 text-sm font-bold"> followers
               <div className=" text-lg">
                 {user?.followersCount}
               </div>
@@ -120,26 +114,23 @@ export default function Profile() {
 
         </div>
 
-        {/* bottom */}
-        <div className="grid md:grid-cols-2 gap-6 mt-6">
+         <div className="grid md:grid-cols-2 gap-6 mt-6">
 
-          {/* about */}
-          <div className=" bg-gray-600 text-white  rounded-xl p-5">
+           <div className=" bg-gray-300 dark:bg-gray-600 dark:text-white  rounded-xl p-5">
             <h3 className="font-semibold mb-3">About</h3>
 
 
-            <p className="text-white text-sm">
-              <span className=" text-white text-lg font-bold">Email: </span>
+            <p className="dark:text-white text-sm">
+              <span className=" dark:text-white text-lg font-bold">Email: </span>
               {user?.email}
             </p>
-            <p className="text-white text-sm">
-              <span className=" text-white text-lg font-bold"> Date Of Birth: </span>
+            <p className="dark:text-white text-sm">
+              <span className=" darK:text-white text-lg font-bold"> Date Of Birth: </span>
 
               {new Date(user?.dateOfBirth).toDateString()}         </p>
           </div>
 
-          {/* right stats */}
-          <div className="flex items-center justify-center bg-gray-600 text-white px-3 py-2 rounded-2xl gap-4 text-sm font-bold">     My Posts
+           <div className="flex items-center justify-center  bg-gray-300 dark:bg-gray-600 dark:text-white px-3 py-2 rounded-2xl gap-4 text-sm font-bold">     My Posts
             <div className=" text-lg">
               {data?.length}
             </div>
@@ -148,16 +139,15 @@ export default function Profile() {
         </div>
       </div>
 
-      {/* tabs */}
-
+ 
 
       <div className=" my-5">
         <CreatePost cart="profile" />
 
 
       </div>
-      <div className="max-w-5xl mx-auto mt-6 bg-gray-700 text-white rounded-xl shadow p-3    flex gap-3">
-        <button className="px-4 py-2 bg-gray-900 text-white rounded-lg font-medium">
+      <div className="max-w-5xl mx-auto mt-6 bg-white  dark:bg-gray-700 text-white rounded-xl shadow p-3    flex gap-3">
+        <button className="px-4 py-2 bg-blue-600 dark:bg-gray-900 text-white rounded-lg font-medium">
           My Posts
         </button>
 
