@@ -140,7 +140,7 @@ export default function Register() {
                             isRequired
                             isInvalid={errors.username}
                             errorMessage={errors.username?.message}
-                            label=" Name "
+                            label=" username "
                             labelPlacement="outside"
 
                             placeholder="Enter your Name"
