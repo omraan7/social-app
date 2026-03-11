@@ -4,14 +4,14 @@ import * as z from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router";
-import { Eye, EyeOff } from "lucide-react";
+import Intro from "../../Componants/intro/intro";
 const cshema = z.object({
     name: z.string("must be a string").min(3, "must be at least 3 characters").max(20, "must be at most 20 characters").regex(/^[a-zA-Z][a-zA-Z '.-]*[A-Za-z][^-]$/, "your name is not valid"),
     username: z.string("must be a string").min(3, "must be at least 3 characters").max(20, "must be at most 20 characters").regex(/^[a-zA-Z][a-zA-Z '.-]*[A-Za-z][^-]$/, "your username is not valid"),
-    email: z.string("must be a string").regex(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, "your email is not valid"),
+    email: z.string("must be a string").email("please enter a valid email").regex(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, "your email is not valid"),
     password: z.string("must be a string").regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/, "your password is not valid"),
     rePassword: z.string("must be a string").regex(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/, "your repassword is not valid"),
     dateOfBirth: z.coerce.date().max(new Date(), "must be in the past").min(new Date(1, 0, 1900), "must be at least 1900-01-01").refine(
@@ -38,9 +38,6 @@ const cshema = z.object({
 
 
 export default function Register() {
-    const [show, setShow] = useState(false);
-    const [showw, setShoww] = useState(false);
-
     const navigate = useNavigate()
 
     // const [isLoading, setIsLoading] = useState(false);
@@ -113,52 +110,14 @@ export default function Register() {
             <div className="container mx-auto flex flex-col md:flex-row min-h-screen">
 
 
-                <div className="min-h-screen w-full md:max-w-1/2  flex items-center justify-center p-6">
-                    <div className="max-w-6xl w-full">
-
-                        <div className="flex items-center gap-3 mb-8">
-
-                            <h2 className="text-3xl text-gray-800 dark:text-white font-bold">Omran....</h2>
-                        </div>
-
-                        <div className="mb-10">
-                            <h1 className="text-4xl  text-gray-800 dark:text-white md:text-6xl font-bold leading-tight">
-                                Welcome Back <br />
-                                <span className="text-blue-900 ">to Omran App</span>
-                            </h1>
-                            <p className="mt-4 text-lg dark:text-white/80">
-                                Signin to connect people all over the world
-                            </p>
-                        </div>
-
-                        <div className="bg-whitend  text-gray-700 backdrop-blur-md border border-white/20 rounded-2xl p-6">
-
-                            <p className="dark:text-white/90 italic mb-6">
-                                “SocialHub has completely changed how I connect with friends and discover new communities. The experience is seamless!”
-                            </p>
-
-                            <div className="flex items-center gap-3">
-                                <img
-                                    src="0"
-                                    alt="avatar"
-                                    className="w-10 h-10 rounded-full"
-                                />
-                                <div>
-                                    <p className=" dark:text-white font-semibold">Alex Johnson</p>
-                                    <p className="text-sm dark:text-white/70">Product Designer</p>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
+                <Intro />
                 <div className="flex w-[50%] justify-center items-center min-h-screen ">
 
                     <Form
 
 
                         onSubmit={handleSubmit(handleSubmitForm)}
-                        className="w-full max-w-7xl mx-auto p-10 mt-5 flex flex-col gap-4 bg-white dark:bg-gray-950 shadow-teal-950/20 shadow-md rounded-2xl"
+                        className="w-full max-w-7xl mx-auto p-10 mt-5 flex flex-col gap-4 bg-white shadow-teal-950/20 shadow-md rounded-2xl"
                     > {isSubmitted && !isValid && (
                         <p className="text-red-500 text-sm">
                             Please fix the errors above
@@ -200,7 +159,7 @@ export default function Register() {
                             isRequired
                             isInvalid={errors.username}
                             errorMessage={errors.username?.message}
-                            label=" UserName "
+                            label=" Name "
                             labelPlacement="outside"
 
                             placeholder="Enter your Name"
@@ -211,7 +170,6 @@ export default function Register() {
                                 label: `${errors.email ? "text-red-500! text-xl!" : "text-xl! dark:text-white! text-gray-800! font-bold"} `,
                                 input: "placeholder:text-gray-400 dark:placeholder:text-gray-200 placeholder:text-lg"
                             }}
-
                             {...register("email")}
 
                             //  {...register("email", {
@@ -247,12 +205,8 @@ export default function Register() {
                             labelPlacement="outside"
                             autoComplete="new-password"
                             placeholder="Enter your password"
-                            type={show ? "text" : "password"}
-                            endContent={
-                                <button type="button" onClick={() => setShow(!show)}>
-                                    {show ? <EyeOff size={18} /> : <Eye size={18} />}
-                                </button>
-                            } />
+                            type="password"
+                        />
 
                         <Input
                             classNames={{
@@ -274,12 +228,8 @@ export default function Register() {
                             labelPlacement="outside"
                             autoComplete="new-password"
                             placeholder="Enter your repassword"
-                            type={showw ? "text" : "password"}
-                            endContent={
-                                <button type="button" onClick={() => setShoww(!showw)}>
-                                    {showw ? <EyeOff size={18} /> : <Eye size={18} />}
-                                </button>
-                            } />
+                            type="password"
+                        />
 
                         {/* 
                 <Controller
@@ -388,8 +338,8 @@ export default function Register() {
                                     labelPlacement="outside"
                                     placeholder="Select a gender"
                                     selectedKeys={field.value ? [field.value] : []}
-                                    isInvalid={errors.gender}
-                                    errorMessage={errors.gender?.message}
+                                    isInvalid={errors.dateOfBirth}
+                                    errorMessage={errors.dateOfBirth?.message}
 
 
 
@@ -420,9 +370,11 @@ export default function Register() {
                         </div>
                         <Link className="text-blue-600 underline" to="/login">Already have an account</Link>
                     </Form>
+
                 </div>
 
             </div>
+
         </>
     )
 }

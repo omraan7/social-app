@@ -3,7 +3,7 @@ import { Card, Skeleton } from '@heroui/react'
 export default function Skeletonn({ page }) {
 
   if (page == 1) {
-    return <Card className="max-w-96 overflow-hidden mx-auto my-3.5   min-h-62" radius="lg">
+    return <Card className="max-w-200 overflow-hidden mx-auto my-3.5  mt-2.5  min-h-62" radius="lg">
       <Skeleton className="rounded-lg my-2.5">
         <div className="h-24 rounded-lg bg-default-300" />
       </Skeleton>

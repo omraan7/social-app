@@ -150,7 +150,7 @@ const backTo = location.state?.from || "/posts";
   if (isError) return <h1>حدث خطأ</h1>;
 
   return (
-    <div className="max-w-xl mx-auto  ">
+    <div className="max-w-xl mx-auto mt-2.5  ">
       <Link to={backTo} replace={true} className="  bg-blue-400 p-2 mt-5  rounded-2xl">Back</Link>
 
       <CardPost post={post} />

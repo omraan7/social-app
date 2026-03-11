@@ -182,14 +182,13 @@ const mutate2 = useMutation({
         ),
 
     onMutate: async () => {
-        await queryClient.cancelQueries(["posts"]);
+        await queryClient.cancelQueries({ queryKey: ["posts"] });
         await queryClient.cancelQueries(["myPosts"]);
 
-        const previousPosts = queryClient.getQueryData(["posts"]);
+        const previousPosts = queryClient.getQueriesData({ queryKey: ["posts"] });
         const previousMyPosts = queryClient.getQueryData(["myPosts"]);
 
-        // تحديث posts
-        queryClient.setQueryData(["posts"], (old) => {
+        queryClient.setQueriesData({ queryKey: ["posts"] }, (old) => {
             if (!old) return old;
             return {
                 ...old,
@@ -215,7 +214,6 @@ const mutate2 = useMutation({
             };
         });
 
-        // تحديث myPosts
         queryClient.setQueryData(["myPosts"], (old) => {
             if (!old) return old;
             return {
@@ -246,13 +244,17 @@ const mutate2 = useMutation({
     },
 
     onError: (err, variables, context) => {
-        queryClient.setQueryData(["posts"], context.previousPosts);
+        context.previousPosts?.forEach(([queryKey, data]) => {
+            queryClient.setQueryData(queryKey, data);
+        });
+
         queryClient.setQueryData(["myPosts"], context.previousMyPosts);
+
         toast.error("Something went wrong");
     },
 
     onSettled: () => {
-        queryClient.invalidateQueries(["posts"]);
+        queryClient.invalidateQueries({ queryKey: ["posts"] });
         queryClient.invalidateQueries(["myPosts"]);
     },
 });

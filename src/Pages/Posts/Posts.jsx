@@ -1,6 +1,6 @@
 import axios from "axios"
 import { Newspaper, Sparkles, Globe, Bookmark, NewspaperIcon, SparklesIcon, Globe2, BookmarkCheck } from "lucide-react";
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { authcontext } from "../../context/Authcontext"
 import Skeletonn from "../../Componants/Skeleton/Skeleton"
 import { useQuery } from "@tanstack/react-query"
@@ -27,14 +27,19 @@ export default function Posts() {
   // },) 
 
 
-  const { token } = useContext(authcontext)
+  const { token, user } = useContext(authcontext)
+  const [type, setType] = useState("feed")
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["posts"],
+    queryKey: ["posts", type],
     queryFn: Getposts
   })
 
-
+  const posts = data?.data?.data?.posts
+  const filteredPosts =
+    type === "myposts"
+      ? posts?.filter((post) => post.user._id === user._id)
+      : posts
 
   function Getposts() {
     return axios.get(`${import.meta.env.VITE_API_URL}posts`, {
@@ -45,6 +50,7 @@ export default function Posts() {
     })
 
   }
+
 
   // try {
   //   useEffect(function ( ) {
@@ -92,37 +98,35 @@ export default function Posts() {
             <div className="bg-white dark:bg-gray-700  rounded-2xl shadow-md p-4 w-full">
               <div className="   grid grid-cols-2 justify-center items-start md:space-y-2 md:flex md:flex-col md:gap-2.5">
                 <NavLink
-                  to="/profile"
-                  className={({ isActive }) =>
-                    `flex gap-2 items-center justify-start p-2 rounded-lg transition-colors dark:text-gray-200 ${isActive ? "bg-gray-200 text-gray-600 dark:bg-gray-800 dark:text-gray-200 font-medium" : "text-gray-700"
-                    }`
+                  onClick={() => setType("feed")}   className={
+                    ` w-full flex gap-2 items-center justify-start p-2 rounded-lg transition-colors dark:text-gray-200 
+                    `
                   }
                 >
                   <span><NewspaperIcon size={20} /></span> feed
                 </NavLink>
                 <NavLink
-                  to="/posts"
-                  className={({ isActive }) =>
-                    `w-full flex gap-2 items-center justify-start p-2 rounded-lg transition-colors  dark:text-gray-200${isActive ? "bg-gray-200 text-gray-600 dark:bg-gray-800 dark:text-gray-200  font-medium" : "text-gray-700"
-                    }`
+                  onClick={() => setType("myposts")}   className={
+                    ` w-full flex gap-2 items-center justify-start p-2 rounded-lg transition-colors dark:text-gray-200 
+                    `
                   }
                 >
                   <span><SparklesIcon size={20} /></span> My Posts
                 </NavLink>
                 <NavLink
-                  to="/profile"
-                  className={({ isActive }) =>
-                    `flex gap-2 items-center justify-start p-2 rounded-lg transition-colors dark:text-gray-200 ${isActive ? "bg-gray-900 text-gray-600 font-medium" : "text-gray-700"
-                    }`
+                  onClick={() => setType("feed")}
+                  className={
+                    ` w-full flex gap-2 items-center justify-start p-2 rounded-lg transition-colors dark:text-gray-200 
+                    `
                   }
                 >
                   <span><Globe2 size={20} /></span> Community
                 </NavLink>
                 <NavLink
                   to="/profile"
-                  className={({ isActive }) =>
-                    `flex gap-2 items-center justify-start p-2 rounded-lg transition-colors dark:text-gray-200 ${isActive ? "bg-gray-200 text-gray-600 font-medium" : "text-gray-700"
-                    }`
+                className={
+                    ` w-full flex gap-2 items-center justify-start p-2 rounded-lg transition-colors dark:text-gray-200 
+                    `
                   }
                 >
                   <span><BookmarkCheck size={20} /></span> Saved
@@ -135,7 +139,10 @@ export default function Posts() {
         {/* Main Feed */}
         <div className="w-full md:w-2/4">
           <CreatePost />
-          {data?.data?.data?.posts?.map((post) => (
+          {/* {data?.data?.data?.posts?.map((post) => (
+            <CardPost key={post._id} post={post} />
+          ))} */}
+          {filteredPosts?.map((post) => (
             <CardPost key={post._id} post={post} />
           ))}
         </div>
