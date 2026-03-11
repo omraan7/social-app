@@ -85,7 +85,7 @@ export default function Profile() {
               className="w-24 h-24 rounded-full border-4 border-white shadow"
               alt=""
             />
-            <Camera size="33" color="#fff" onClick={() => imgUplode.current.click()} />
+            <Camera size="33" className=" black dark:text-white" onClick={() => imgUplode.current.click()} />
             {/* <img src={  URL.createObjectURL(user?.photo)} alt="" /> */}
             <input type="file" className="hidden" onChange={handelprofileimg} ref={imgUplode} />
             <div>

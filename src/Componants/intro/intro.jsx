@@ -34,8 +34,8 @@ export default function Intro() {
                   className="w-10 h-10 rounded-full"
                 />
                 <div>
-                  <p className=" dark:text-white font-semibold">Alex Johnson</p>
-                  <p className="text-sm dark:text-white/70">Product Designer</p>
+                  <p className=" dark:text-white font-semibold">Mohamed Omran</p>
+                  <p className="text-sm dark:text-white/70">Front-End Developer</p>
                 </div>
               </div>
             </div>

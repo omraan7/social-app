@@ -133,9 +133,14 @@ export default function AppNavBar() {
                 </NavbarContent>
                 <NavbarMenu>
 
-                    {token ? <Link to="posts" onClick={() => { setIsMenuOpen(false) }} >
+                    {token ? <>
+                    <Link to="posts" onClick={() => { setIsMenuOpen(false) }} >
                         Posts
-                    </Link> : <Link to="register" onClick={() => { setIsMenuOpen(false) }} >
+                    </Link>
+                    <Link to="profile" onClick={() => { setIsMenuOpen(false) }} >
+                        Profile
+                    </Link>
+                    </> : <Link to="register" onClick={() => { setIsMenuOpen(false) }} >
                         Sign Up
                     </Link>
                     }

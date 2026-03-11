@@ -92,7 +92,7 @@ export default function Register() {
 
 
                 <Intro />
-                <div className="flex w-[50%] justify-center items-center min-h-screen ">
+                <div className="flex w-full md:w-[50%] justify-center items-center min-h-screen ">
 
                     <Form
 

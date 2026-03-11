@@ -77,7 +77,7 @@ export default function Login() {
       <div className="container mx-auto flex flex-col md:flex-row min-h-screen">
       
      <Intro/>
-        <div className="flex w-[50%] justify-center items-center min-h-screen ">
+        <div className="flex w-full md:w-[50%]  justify-center items-center min-h-screen ">
           <Form
 
 
