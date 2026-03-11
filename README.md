@@ -1,16 +1,39 @@
-# React + Vite
+# 🌐 Social App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern **social media web application** where users can:
 
-Currently, two official plugins are available:
+- Create posts  
+- Interact through **comments, replies, likes, shares**  
+- Manage their personal profiles  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The app consumes a **REST API** to handle authentication, posts, comments, user interactions, and notifications.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+# ✨ Features
 
-## Expanding the ESLint configuration
+## 🛡 Authentication
+- **Sign Up** – Create a new user account  
+- **Sign In** – Login using email, username, or password  
+- **Change Password** – Rotate password securely  
+- **Upload Profile Photo** – Update user avatar  
+- **Get Current User Profile** – Fetch authenticated user data  
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 📰 Posts & Feed
+- **View Public Posts** – Browse all posts (newest first)  
+- **Home Timeline Feed** – See posts from followed users and yourself  
+- **Create Post** – Add new posts with text or images  
+- **Update Post** – Edit your post’s content or image  
+- **Delete Post** – Remove your own posts  
+- **Like / Unlike Post** – Toggle post likes  
+- **Share Post** – Share posts with your followers  
+
+## 💬 Comments & Replies
+- **Create Comment** – Add text or image comments on posts  
+- **Edit Comment** – Update your comments  
+- **Delete Comment** – Remove your comments  
+- **View Comments with Pagination** – Efficiently browse comments  
+
+## 👥 Users
+- **View Profile Data** – Access your profile details  
+- **Suggested Users to Follow** – Get recommendations on who to follow  
