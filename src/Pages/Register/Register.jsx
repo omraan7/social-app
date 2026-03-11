@@ -61,50 +61,31 @@ export default function Register() {
         }
     }, [isSubmitSuccessful]);
 
+ async function handleSubmitForm(data) {
+    console.log("Submitting:", data);
 
-    async function handleSubmitForm(x) {
-        console.log(x);
-
-        try {
-            // setIsLoading(true);
-            await toast.promise(
-                axios.post(`${import.meta.env.VITE_API_URL}users/signup`, x),
-                {
-                    loading: 'Waiting    ',
-                    success: function (x) {
-                        navigate("/login")
-                        return x.data.message;
-                        // console.log(x.data.message);
-
-
-                    },
-                    error: function (x) {
-
-
-                        return (x.response.data.error);
-
-                    },
+    try {
+        await toast.promise(
+            axios.post(`${import.meta.env.VITE_API_URL}users/signup`, data),
+            {
+                loading: 'Registering...',
+                success: () => {
+                    navigate("/login");
+                    return "Registration successful!";
                 },
-            );
-        }
-        catch (error) {
-            // setIsLoading(false);
-        }
-        // try {
-        //     // setIsLoading(true);
-        //     // const rse = await axios.post(`${import.meta.env.VITE_API_URL}/users/signup`, x)
-        //     // console.log(rse);
-        //     // setIsLoading(false);
-
-
-        // } catch (error) {
-
-
-        // }
-
-        // setIsLoading(false);
-
+                error: (err) => {
+                    if (err.response?.status === 409) {
+                        return "Email or username already exists. Please try another.";
+                    } 
+                    return "Something went wrong. Please try again later.";
+                },
+            }
+        );
+    } catch (err) {
+        console.error("Unexpected error:", err);
+        toast.error("An unexpected error occurred.");
     }
+}
     return (
         <>
             <div className="container mx-auto flex flex-col md:flex-row min-h-screen">
