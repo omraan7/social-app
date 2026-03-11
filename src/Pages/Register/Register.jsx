@@ -319,8 +319,8 @@ export default function Register() {
                                     labelPlacement="outside"
                                     placeholder="Select a gender"
                                     selectedKeys={field.value ? [field.value] : []}
-                                    isInvalid={errors.dateOfBirth}
-                                    errorMessage={errors.dateOfBirth?.message}
+                                    isInvalid={errors.gender}
+                                    errorMessage={errors.gender?.message}
 
 
 
