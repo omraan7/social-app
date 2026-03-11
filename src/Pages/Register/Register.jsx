@@ -98,7 +98,7 @@ export default function Register() {
 
 
                         onSubmit={handleSubmit(handleSubmitForm)}
-                        className="w-full max-w-7xl mx-auto p-10 mt-5 flex flex-col gap-4 bg-white shadow-teal-950/20 shadow-md rounded-2xl"
+                        className="w-full max-w-7xl mx-auto p-10 mt-5 flex dark:bg-gray-950 flex-col gap-4 bg-white shadow-teal-950/20 shadow-md rounded-2xl"
                     > {isSubmitted && !isValid && (
                         <p className="text-red-500 text-sm">
                             Please fix the errors above
