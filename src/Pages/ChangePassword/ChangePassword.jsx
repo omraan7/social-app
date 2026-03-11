@@ -7,6 +7,7 @@ import { useState } from "react";
 import { EyeOff } from "lucide-react";
 import { Eye } from "iconsax-reactjs";
 import { Input } from "@heroui/react";
+import { useNavigate } from "react-router";
 
 const schema = z
   .object({
@@ -34,6 +35,8 @@ const schema = z
   });
 
 export default function ChangePassword() {
+    const navigate = useNavigate()
+
   const [show, setShow] = useState({
     current: false,
     new: false,
@@ -72,8 +75,10 @@ export default function ChangePassword() {
         }
       );
 
-      localStorage.setItem("token", res.data.token);
-      toast.success("Password updated successfully ✅");
+ localStorage.removeItem("token");
+       toast.success("Password updated successfully ✅");
+                          navigate("/login");
+
       reset();
     } catch (err) {
       toast.error("Your old password is incorrect");
